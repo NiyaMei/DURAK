@@ -1,0 +1,23 @@
+Game started!
+Write your name:
+Here're your cards:
+Here're comp's cards:
+The trump suit in this game is:
+Minimal trump suit card of the player:
+Minimal trump suit card of the comp:
+
+Player starts
+How many cards do you put to attack? ___
+Write are their indeces:  ___
+You're throwing ____
+Comp defends with ___           Comp picked up the cards. It's your turn again!
+Beaten!
+
+Comp starts
+Comp attacks you with these cards: ___
+What cards do you choose to defend? Write the indeces: (if you can't beat the cards, type '-1') ___
+
+If player2 defended_or_not == True : whose_turn == player2
+Else: return "{player2} picked up the cards, {player1} attacks again"
+
+

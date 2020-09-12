@@ -1,9 +1,8 @@
-import utils
+from utils import *
 from cards import Deck, Card
-from players import Player, Comp, make_step
-#from constants import *
+from players import Player, Comp
+from constants import *
 
-VALUES_DICT = {100 : "No trump suit cards", 6: '6', 7: '7', 8: '8', 9: '9', 10: '10', 11: 'J', 12: 'Q', 13: 'K', 14: 'A'}
 
 def start_game():
     print("Game started!")
@@ -29,8 +28,8 @@ def start_game():
 
 
 def define_whose_turn(player, comp, trump_suit):
-    player_min_trump_suit = utils.min_trump_suit(trump_suit, player.deck)
-    comp_min_trump_suit = utils.min_trump_suit(trump_suit, comp.deck)
+    player_min_trump_suit = min_trump_suit(trump_suit, player.deck)
+    comp_min_trump_suit = min_trump_suit(trump_suit, comp.deck)
     print("Minimal trump suit card of the player: ", VALUES_DICT[player_min_trump_suit])
     print("Minimal trump suit card of the comp: ", VALUES_DICT[comp_min_trump_suit])
     if player_min_trump_suit < comp_min_trump_suit:

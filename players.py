@@ -1,28 +1,6 @@
 from cards import Deck, Card
 from constants import NUMS_DICT, VALUES_DICT
-
-def make_step(player1, player2, trump_suit):        # one attacks, the other defends
-    attack_cards = player1.attacks(trump_suit)
-    defended_or_not = "Wrong action"
-    while defended_or_not == "Wrong action":
-        defended_or_not = player2.defends(attack_cards, trump_suit)
-    return defended_or_not
-
-
-def is_beatable(defend_card, attack_card, trump_suit):
-    if defend_card.suit != attack_card.suit and defend_card.suit != trump_suit:
-        print("Wrong suit! Try again!")
-        return False
-    elif defend_card.value < attack_card.value:
-        print("Your card is too small to beat it. Try again!")
-        return False
-    else:
-        print("Beaten!")
-        return True
-
-
-def are_equal_cards(card_a, card_b, trump_suit):
-    return card_a.value == card_b.value and card_a.suit != trump_suit
+from utils import *
 
 
 class APlayer:
@@ -53,13 +31,14 @@ class Player(APlayer):
         defend_cards = Deck()
         cards_indices = list(map(int, input("What cards do you put for attack? Write their indices (if you can't beat a card, type '-1'):  ").split()))
         for card_index in cards_indices:
-            if card_index == -1:
-                self.deck.add_cards(attack_cards)
-                return "You couldn't defend and picked up cards"
-            defend_card = self.deck.get_card_by_index(card_index)
-            if is_beatable(defend_card, attack_card, trump_suit) == False:
-                return "Wrong action"
-            defend_cards.add_card(defend_card)
+            for attack_card in attack_cards:
+                if card_index == -1:
+                    self.deck.add_cards(attack_cards)
+                    return "You couldn't defend and picked up cards"
+                defend_card = self.deck.get_card_by_index(card_index)
+                if is_beatable(defend_card, attack_card, trump_suit) == False:
+                    return "Wrong action"
+                defend_cards.add_card(defend_card)
         print("You're throwing these cards: ")
         defend_cards.show()
         updated_deck = Deck()
@@ -95,21 +74,6 @@ class Comp(APlayer):
     def __init__(self, a_name="comp"):
         super().__init__(a_name)
 
-    def attacks(self, trump_suit):
-        plain_suit = Deck()         # plain_suit contains all comp's non-trump suit cards
-        for i in self.deck.deck:        # I forgot why?
-            if i.suit != trump_suit:
-                plain_suit.add_card(i)
-        attack_cards = Deck()
-        min_card = plain_suit.find_min()
-        for i, card in enumerate(plain_suit):
-            #print("a plain suit card:")
-            #card.show_card()
-            if are_equal_cards(card, min_card, trump_suit):
-                attack_cards.add_card(card)
-                self.deck.delete_card(i)
-        return  "Comp attack with these cards: ", attack_cards
-
     # TO DO: add possibility to pick up cards if couldn't beat, and it must return Boolean: defended or not
     def defends(self, attack_cards, trump_suit):
         defended_or_not = False
@@ -126,6 +90,22 @@ class Comp(APlayer):
             if j in defend_cards_indices:
                 self.deck.delete_card(j)
         return defended_or_not
+
+    def attacks(self, trump_suit):
+        plain_suit = Deck()         # plain_suit contains all comp's non-trump suit cards
+        for i in self.deck.deck:        # I forgot why?
+            if i.suit != trump_suit:
+                plain_suit.add_card(i)
+        attack_cards = Deck()
+        min_card = plain_suit.find_min()
+        for i, card in enumerate(plain_suit):
+            #print("a plain suit card:")
+            #card.show_card()
+            if are_equal_cards(card, min_card, trump_suit):
+                attack_cards.add_card(card)
+                self.deck.delete_card(i)
+        return  "Comp attack with these cards: ", attack_cards
+
 
 
 
